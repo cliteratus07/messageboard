@@ -22,7 +22,8 @@ class RepliesController extends AppController {
  *
  * @return void
  */
-	public function index() {
+	public function index($id) {
+		var_dump($id);
 		$this->Reply->recursive = 0;
 		$this->set('replies', $this->Paginator->paginate());
 	}
@@ -48,7 +49,15 @@ class RepliesController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->autoRender = false;
+		$this->request->allowMethod('ajax','POST', 'GET');
+		$user_id = AuthComponent::user('id');
 		if ($this->request->is('post')) {
+			
+		pr ($this->request->data);
+		$this->request->data['Reply']['user_id'] = $this->request->data['userid'];
+		$this->request->data['Reply']['message_id'] = $this->request->data['messageid'];
+		$this->request->data['Reply']['reply'] = $this->request->data['messagereply'];
 			$this->Reply->create();
 			if ($this->Reply->save($this->request->data)) {
 				$this->Flash->success(__('The reply has been saved.'));
@@ -57,9 +66,11 @@ class RepliesController extends AppController {
 				$this->Flash->error(__('The reply could not be saved. Please, try again.'));
 			}
 		}
-		$messages = $this->Reply->Message->find('list');
-		$users = $this->Reply->User->find('list');
-		$this->set(compact('messages', 'users'));
+		// $messages = $this->Reply->Message->find('list');
+		// $users = $this->Reply->User->find('list');
+		// $this->set(compact('messages', 'users'));
+		
+		$this->redirect($this->referer());
 	}
 
 /**
@@ -106,6 +117,6 @@ class RepliesController extends AppController {
 		} else {
 			$this->Flash->error(__('The reply could not be deleted. Please, try again.'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		$this->redirect($this->referer());
 	}
 }

@@ -1,0 +1,9 @@
+.ty-compact-list {
+    padding: 5px 5px 5px 0px;
+    float: left;
+    width: 100%;
+  }
+  .show-more {
+    display: none;
+    cursor: pointer;
+  }
