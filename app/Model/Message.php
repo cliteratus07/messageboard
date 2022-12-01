@@ -65,48 +65,4 @@ class Message extends AppModel {
 	);
 
 	// The Associations below have been created with all possible keys, those that are not needed can be removed
-
-/**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'FromUser' => array(
-			'className' => 'User',
-			'foreignKey' => 'from_user',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'ToUser' => array(
-			'className' => 'User',
-			'foreignKey' => 'to_user',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'Reply' => array(
-			'className' => 'Reply',
-			'foreignKey' => 'message_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
-
 }

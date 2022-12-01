@@ -130,20 +130,5 @@ class User extends AppModel {
  *
  * @var array
  */
-	public $hasMany = array(
-		'Reply' => array(
-			'className' => 'Reply',
-			'foreignKey' => 'user_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
 
 }

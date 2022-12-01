@@ -17,62 +17,6 @@
 
     ?>
 </div>
-<!-- <div class="table-content">
-<table>
-    <tr>
-        <th>From</th>
-        <th>To</th>
-        <th>Message</th>
-        <th>Created</th>
-        <th>Action</th>
-    </tr>
-    <tr>
-        <td><img src="<?php echo $this->webroot; ?>img/<?php echo $message1['FromUser']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"><?php echo $message['FromUser']['username']; ?></td>
-        <td><img src="<?php echo $this->webroot; ?>img/<?php echo $message1['ToUser']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"><?php echo $message['ToUser']['username']; ?></td>
-        <td><?php echo $message['Message']['message']; ?></td>
-        <td><?php echo $message['Message']['created_at']; ?></td>
-        <td>
-        <?php 
-       echo $this->Form->postLink('',
-          array(
-               'controller'=>'messages','action'=>'delete', $message['Message']['id']), array(
-               'class'=>'del btn btn-sm btn-danger fa fa-trash disabled',
-               'id'=>$message['Message']['id'], 'aria-hidden'=>"true" //important 
-          ), 'Are you sure you want to delete this post?');
-      ?> 
-        </td>
-    </tr>
-    <?php foreach($messages2 as $message2) : ?>
-    <tr>
-        <td><img src="<?php echo $this->webroot; ?>img/<?php echo $message2['User']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"><?php echo $message2['User']['username']; ?></td>
-        <td><?php echo ' '; ?></td>
-        <td><?php echo $message2['Reply']['reply']; ?></td>
-        <td><?php echo $message2['Reply']['created_at']; ?></td>
-        <td>
-        <?php if($message2['User']['id'] == AuthComponent::user('id'))
-        {
-            echo $this->Form->postLink('',
-            array(
-                 'controller'=>'replies','action'=>'delete', $message2['Reply']['id']), array(
-                 'class'=>'del btn btn-sm btn-danger fa fa-trash',
-                 'id'=>$message2['Reply']['id'], 'aria-hidden'=>"true" //important 
-            ), 'Are you sure you want to delete this post?');  
-        }
-        else{
-            echo $this->Form->postLink('',
-          array(
-               'controller'=>'replies','action'=>'delete', $message2['Reply']['id']), array(
-               'class'=>'del btn btn-sm btn-danger fa fa-trash disabled',
-               'id'=>$message2['Reply']['id'], 'aria-hidden'=>"true" //important 
-          ), 'Are you sure you want to delete this post?');
-      
-        }
-       ?> 
-        </td>
-    </tr>
-    <?php endforeach; ?>
-</table>
-</div> -->
 
 <div class="container-fluid content">
     <!-- <div class="row items" style="margin-bottom: 8px;">
@@ -83,9 +27,17 @@
         <div class="col-sm">Action</div>
     </div> -->
     <div class="row items p-3 mb-2 bg-info text-white" style="margin-bottom: 8px;">
-        <div class="col-sm"><img src="<?php echo $this->webroot; ?>img/<?php echo $message1['FromUser']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"><?php echo $message['FromUser']['username']; ?></div>
-        <div class="col-sm"><img src="<?php echo $this->webroot; ?>img/<?php echo $message1['ToUser']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"><?php echo $message['ToUser']['username']; ?></div>
-        <div class="col-sm"><?php echo $message['Message']['message']; ?></div>
+        <?php foreach($users as $user) : ?>
+          <?php if($user['Users']['id'] == $message['Message']['from_user']): ?>
+        <div class="col-sm"><img src="<?php echo $this->webroot; ?>img/<?php echo $user['Users']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"><?php echo $user['Users']['username']; ?></div>
+          <?php endif; ?>
+        <? endforeach; ?>
+        <?php foreach($users as $user) : ?>
+          <?php if($user['Users']['id'] == $message['Message']['to_user']): ?>
+        <div class="col-sm"><img src="<?php echo $this->webroot; ?>img/<?php echo $user['Users']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"><?php echo $user['Users']['username']; ?></div>
+          <?php endif; ?>
+        <? endforeach; ?>
+       <div class="col-sm"><?php echo $message['Message']['message']; ?></div>
         <div class="col-sm"><?php echo $message['Message']['created_at']; ?></div>
         <div class="col-sm">
         <?php 
@@ -98,27 +50,27 @@
       ?> </div>
     </div>
     <?php foreach($messages2 as $message2) : ?>
-        <?php if($message2['User']['id'] == AuthComponent::user('id')) : ?>
+        <?php if($message2['r']['user_id'] == AuthComponent::user('id')) : ?>
     
             <div class="row items p-3 mb-2 bg-primary text-white" style="margin-bottom: 8px;">
-        <div class="col-sm"><?php echo $message2['Reply']['reply']; ?></div>
-        <div class="col-sm"><img src="<?php echo $this->webroot; ?>img/<?php echo $message2['User']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"></div>
-        <div class="col-sm"><?php echo $message2['Reply']['created_at']; ?></div>
-        <div class="col-sm"><?php if($message2['User']['id'] == AuthComponent::user('id'))
+        <div class="col-sm"><?php echo $message2['r']['reply']; ?></div>
+        <div class="col-sm"><img src="<?php echo $this->webroot; ?>img/<?php echo $message2['u']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"></div>
+        <div class="col-sm"><?php echo $message2['r']['created_at']; ?></div>
+        <div class="col-sm"><?php if($message2['r']['user_id'] == AuthComponent::user('id'))
         {
             echo $this->Form->postLink('',
             array(
-                 'controller'=>'replies','action'=>'delete', $message2['Reply']['id']), array(
+                 'controller'=>'replies','action'=>'delete', $message2['r']['id']), array(
                  'class'=>'del btn btn-sm btn-danger fa fa-trash',
-                 'id'=>$message2['Reply']['id'], 'aria-hidden'=>"true" //important 
+                 'id'=>$message2['r']['id'], 'aria-hidden'=>"true" //important 
             ), 'Are you sure you want to delete this post?');  
         }
         else{
             echo $this->Form->postLink('',
           array(
-               'controller'=>'replies','action'=>'delete', $message2['Reply']['id']), array(
+               'controller'=>'replies','action'=>'delete', $message2['r']['id']), array(
                'class'=>'del btn btn-sm btn-danger fa fa-trash disabled',
-               'id'=>$message2['Reply']['id'], 'aria-hidden'=>"true" //important 
+               'id'=>$message2['r']['id'], 'aria-hidden'=>"true" //important 
           ), 'Are you sure you want to delete this post?');
       
         }
@@ -126,24 +78,24 @@
     </div>
     <?php else: ?>
         <div class="row items p-3 mb-2 bg-secondary text-white" style="margin-bottom: 8px;">
-        <div class="col-sm"><img src="<?php echo $this->webroot; ?>img/<?php echo $message2['User']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"></div>
-        <div class="col-sm"><?php echo $message2['Reply']['reply']; ?></div>
-        <div class="col-sm"><?php echo $message2['Reply']['created_at']; ?></div>
-        <div class="col-sm"><?php if($message2['User']['id'] == AuthComponent::user('id'))
+        <div class="col-sm"><img src="<?php echo $this->webroot; ?>img/<?php echo $message2['u']['image']; ?>" alt="message" style="width:30px;height:30px;border-radius: 50%;"></div>
+        <div class="col-sm"><?php echo $message2['r']['reply']; ?></div>
+        <div class="col-sm"><?php echo $message2['r']['created_at']; ?></div>
+        <div class="col-sm"><?php if($message2['r']['user_id'] == AuthComponent::user('id'))
         {
             echo $this->Form->postLink('',
             array(
-                 'controller'=>'replies','action'=>'delete', $message2['Reply']['id']), array(
+                 'controller'=>'replies','action'=>'delete', $message2['r']['id']), array(
                  'class'=>'del btn btn-sm btn-danger fa fa-trash',
-                 'id'=>$message2['Reply']['id'], 'aria-hidden'=>"true", 'title' => 'Delete' //important 
+                 'id'=>$message2['r']['id'], 'aria-hidden'=>"true", 'title' => 'Delete' //important 
             ), 'Are you sure you want to delete this post?');  
         }
         else{
             echo $this->Form->postLink('',
           array(
-               'controller'=>'replies','action'=>'delete', $message2['Reply']['id']), array(
+               'controller'=>'replies','action'=>'delete', $message2['r']['id']), array(
                'class'=>'del btn btn-sm btn-danger fa fa-trash disabled',
-               'id'=>$message2['Reply']['id'], 'aria-hidden'=>"true", 'title' => 'Delete' //important 
+               'id'=>$message2['r']['id'], 'aria-hidden'=>"true", 'title' => 'Delete' //important 
           ), 'Are you sure you want to delete this post?');
       
         }
